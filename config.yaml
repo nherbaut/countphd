@@ -1,0 +1,10 @@
+girafe:
+  url:
+    git@github.com:nherbaut/girafe_poster.git
+  file:
+    girafe.tex
+  counter: 
+    true
+
+
+
