@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 import argparse
 import subprocess
-
 import os
 import yaml
 import tempfile
+import codecs
 from git import Repo
 from jsmin import jsmin
 from jinja2 import Environment, PackageLoader, select_autoescape
 from PyPDF2 import PdfFileReader
+
 
 CURR_FOLDER=os.path.dirname(os.path.abspath(__file__))
 parser = argparse.ArgumentParser(description='Generate js counter of a pdf document')
@@ -49,7 +50,7 @@ words_count=int(subprocess.check_output('pdftotext %s  -|wc -w'%thesis_file_name
                         shell=True))
 
 
-with open(os.path.join(CURR_FOLDER,"contrib/countUp.js"), "r") as f:
+with codecs.open(os.path.join(CURR_FOLDER,"contrib/countUp.js"), "r", encoding="utf-8") as f:
     countUp=f.read()
 
 with open(args.file_out,"w") as f:
