@@ -10,7 +10,7 @@ from jsmin import jsmin
 from jinja2 import Environment, PackageLoader, select_autoescape
 from PyPDF2 import PdfFileReader
 
-
+CURR_FOLDER=os.path.dirname(os.path.abspath(__file__))
 parser = argparse.ArgumentParser(description='Generate js counter of a pdf document')
 
 parser.add_argument('--config', default="config.yaml",)
@@ -49,7 +49,7 @@ words_count=int(subprocess.check_output('pdftotext %s  -|wc -w'%thesis_file_name
                         shell=True))
 
 
-with open("contrib/countUp.js", "r") as f:
+with open(os.path.join(CURR_FOLDER,"contrib/countUp.js"), "r") as f:
     countUp=f.read()
 
 with open(args.file_out,"w") as f:
