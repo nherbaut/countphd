@@ -5,6 +5,7 @@ import os
 import yaml
 import tempfile
 import codecs
+import shutil
 from git import Repo
 from jsmin import jsmin
 from jinja2 import Environment, PackageLoader, select_autoescape
@@ -15,7 +16,7 @@ CURR_FOLDER=os.path.dirname(os.path.abspath(__file__))
 parser = argparse.ArgumentParser(description='Generate js counter of a pdf document')
 
 parser.add_argument('--config', default="config.yaml",)
-parser.add_argument('--file_out', default="thesis_counter.js",)
+parser.add_argument('--folder_out', default="/var/phd_counter",)
 parser.add_argument('--delay', default=5, type=int)
 
 args = parser.parse_args()
@@ -53,5 +54,7 @@ words_count=int(subprocess.check_output('pdftotext %s  -|wc -w'%thesis_file_name
 with codecs.open(os.path.join(CURR_FOLDER,"contrib/countUp.js"), "r", encoding="utf-8") as f:
     countUp=f.read()
 
-with open(args.file_out,"w") as f:
+with open(os.path.join(args.folder_out,"thesis_counter.js"),"w") as f:
     f.write("%s"% jsmin(countUp+"\n"+template.render(pages_count=pages_count, words_count=words_count,delay=args.delay)))
+
+shutil.copyfile(thesis_file_name,os.path.join(args.folder_out,"thesis.pdf"))
