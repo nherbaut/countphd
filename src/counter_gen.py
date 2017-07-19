@@ -54,7 +54,7 @@ for artifact in config.keys():
                                 shell=True))
 
 
-        with open(os.path.join(CURR_FOLDER,"contrib/countUp.js"), "r") as f:
+        with codecs.open(os.path.join(CURR_FOLDER,"contrib/countUp.js"), "r", encoding="utf-8") as f:
             countUp=f.read()
 
         with open(os.path.join(args.folder_out,"thesis_counter.js"),"w") as f:
