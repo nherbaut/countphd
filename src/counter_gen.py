@@ -31,30 +31,33 @@ template = env.get_template('thesis_counter.js.tpl')
 with open(args.config) as f:
     config=yaml.load(f.read())
 
+for artifact in config.keys():
+    #clone the repo
+    directory=tempfile.TemporaryDirectory()
+    Repo.clone_from(config[artifact]["url"], directory.name)
+    output=subprocess.call(["latexmk","-pdf",config[artifact]["file"],"-jobname="+artifact],cwd=directory.name)
+    if output != 0:
+        exit(-1)
 
-#clone the repo
-directory=tempfile.TemporaryDirectory()
-Repo.clone_from(config["phd"]["url"], directory.name)
-output=subprocess.call(["latexmk","-pdf",config["phd"]["file"]],cwd=directory.name)
-if output != 0:
-    exit(-1)
+    thesis_file_name=os.path.join(directory.name,artifact+".pdf")
+    finale_file_name=artifact+".pdf"
+    shutil.copyfile(thesis_file_name,os.path.join(args.folder_out,finale_file_name))
+    
+    if config[artifact].get("counter",False):
 
-thesis_file_name=os.path.join(directory.name,config["phd"]["file"]).replace("tex","pdf")
-
-
-with open(thesis_file_name, "rb") as f:
-    thesis_file = PdfFileReader(f)
-    pages_count=thesis_file.getNumPages()
+        with open(thesis_file_name, "rb") as f:
+            thesis_file = PdfFileReader(f)
+            pages_count=thesis_file.getNumPages()
 
 
-words_count=int(subprocess.check_output('pdftotext %s  -|wc -w'%thesis_file_name,
-                        shell=True))
+        words_count=int(subprocess.check_output('pdftotext %s  -|wc -w'%thesis_file_name,
+                                shell=True))
 
 
-with codecs.open(os.path.join(CURR_FOLDER,"contrib/countUp.js"), "r", encoding="utf-8") as f:
-    countUp=f.read()
+        with open(os.path.join(CURR_FOLDER,"contrib/countUp.js"), "r") as f:
+            countUp=f.read()
 
-with open(os.path.join(args.folder_out,"thesis_counter.js"),"w") as f:
-    f.write("%s"% jsmin(countUp+"\n"+template.render(pages_count=pages_count, words_count=words_count,delay=args.delay)))
+        with open(os.path.join(args.folder_out,"thesis_counter.js"),"w") as f:
+            f.write("%s"% jsmin(countUp+"\n"+template.render(pages_count=pages_count, words_count=words_count,delay=args.delay)))
 
-shutil.copyfile(thesis_file_name,os.path.join(args.folder_out,"thesis.pdf"))
+        
