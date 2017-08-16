@@ -4,7 +4,7 @@ This docker container helps streamlining your Latex Document production by (1) c
 
 # Manifest file
 
-The manifest file is a simple yaml file that describes how to get your repository and which latex file to use as input. There can be more than one repository in the manifest
+The file should be called config.yaml. The manifest file is a simple yaml file that describes how to get your repository and which latex file to use as input. There can be more than one repository in the manifest
 
 example:
 
