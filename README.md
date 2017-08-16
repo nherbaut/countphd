@@ -25,6 +25,16 @@ the counter boolean is a little trick that, if set to true, also creates a js fi
 
 ```
 
+# How to build
+
+I used docker to package everything. To build the project, just call this at the root of the repo
+
+```
+docker build . -t nherbaut/phd_count
+```
+
+
+
 # Usage
 
 you should bind a local folder containing the manifest file to receive the result as a pdf file copied in the same folder.
