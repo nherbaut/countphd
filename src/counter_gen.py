@@ -37,7 +37,7 @@ for artifact in config.keys():
     Repo.clone_from(config[artifact]["url"], directory.name)
     output=subprocess.call(["latexmk","-pdf",config[artifact]["file"],"-jobname="+artifact],cwd=directory.name)
     if output != 0:
-        exit(-1)
+        print("Error in latexmk, continuing all the same, results may not be accurate %d"%output)
 
     thesis_file_name=os.path.join(directory.name,artifact+".pdf")
     finale_file_name=artifact+".pdf"
