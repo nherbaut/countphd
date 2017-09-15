@@ -35,7 +35,7 @@ for artifact in config.keys():
     #clone the repo
     directory=tempfile.TemporaryDirectory()
     Repo.clone_from(config[artifact]["url"], directory.name)
-    output=subprocess.call(["latexmk","-pdf",config[artifact]["file"],"-jobname="+artifact],cwd=directory.name)
+    output=subprocess.call(["latexmk","-f", "-pdf",config[artifact]["file"],"-jobname="+artifact],cwd=directory.name)
     if output != 0:
         print("Error in latexmk, continuing all the same, results may not be accurate %d"%output)
 
